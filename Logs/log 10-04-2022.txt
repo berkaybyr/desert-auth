@@ -1,2 +1,0 @@
-VALID TOKEN TOKEN:tester,tester IP:asd SECRET:asd
-WRONG PASSWORD TOKEN:tester,testerd IP:asd SECRET:asd

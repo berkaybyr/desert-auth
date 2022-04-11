@@ -5,7 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>desert_auth</RootNamespace>
+    <PackageIcon></PackageIcon>
+    <ApplicationIcon>redEye copy.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="redEye copy.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
@@ -29,6 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CreateTblUser.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="service.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -20,13 +20,13 @@ namespace desert_auth.Class
             {
                 if (!IPAddress.Parse(ip).Equals(remoteIp))
                 {
-                    Console.WriteLine("IP NOT ALLOWED IP: " + remoteIp);
+                    Console.WriteLine("[REQUEST DENIED] IP: " + remoteIp);
                     context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    await context.Response.WriteAsync("Authorization Failure from IP: " + remoteIp);
+                    await context.Response.WriteAsync("Authorization Failure");
                     return;
                 }
             }
-            
+
 
             await _next.Invoke(context);
         }

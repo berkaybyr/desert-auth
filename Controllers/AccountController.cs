@@ -1,35 +1,46 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
+using EasMe;
+using desert_auth.Class;
+using System.Data.SqlClient;
+
 namespace desert_auth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
+        EasQL _sql = new EasQL();
+        Service _service = new Service(true);
         [HttpPost("Register")]
-        public IActionResult Register(string username, string password, string email)
+        public IActionResult Register(string username, string password, string confirmpassword, string email, string ip)
         {
-            string ip = HttpContext.GetServerVariable("HTTP_X_FORWARDED_FOR");
-            if (string.IsNullOrEmpty(ip))
-            {
-                ip = HttpContext.GetServerVariable("REMOTE_ADDR");
-            }
-            
             DateTime registerDate = DateTime.Now;
+            string query = "PaGamePublic.uspAuthenticateOrCreateUser";
+            var cmd = new SqlCommand(query);
+            cmd.Parameters.AddWithValue("@userId", username);
+            cmd.Parameters.AddWithValue("@ip", ip);
+            _sql.ExecStoredProcedure(_service.WorldConn,cmd);
+            
 
-            return StatusCode(100,ip);
-           
+            return StatusCode(100);
+
         }
         [HttpPost("Login")]
         public IActionResult Login(string username, string password)
         {
-            if (username == "admin" && password == "admin")
-            {
-                return Ok(new { token = "admin" });
-            }
-            return Unauthorized();
+            return StatusCode(100);
         }
-      
+        [HttpPost("ResetPassword")]
+        public IActionResult ResetPassword(string username, string email, string phone, string ip)
+        {
+            return StatusCode(100);
+        }
+    
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(string email,string username, string password, string newpassword, string confirmpassword, string ip)
+        {
+            return StatusCode(100);
+        }
+
     }
 }

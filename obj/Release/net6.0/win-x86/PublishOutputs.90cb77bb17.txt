@@ -1,5 +1,6 @@
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\appsettings.json
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\desert-auth.pdb
+C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\CreateTblUser.sql
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\service.ini
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\aspnetcorev2_inprocess.dll
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\PubTmp\Out\sni.dll
