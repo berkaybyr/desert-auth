@@ -1,5 +1,5 @@
 ﻿using EasMe;
-
+using System.Text.RegularExpressions;
 
 namespace desert_auth.Class
 {
@@ -63,7 +63,27 @@ namespace desert_auth.Class
         public void Log(string message)
         {
             _log.Create(message);
-            Console.WriteLine(message);
+            Console.WriteLine($"[{DateTime.Now}] {message}");
         }
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+
+        public bool IsValidPhone(string number)
+        {
+            string motif = @"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$";
+            if (number != null) return Regex.IsMatch(number, motif);
+            else return false;
+        }        
     }
 }
