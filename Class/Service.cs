@@ -16,13 +16,14 @@ namespace desert_auth.Class
         public string WorldConn;
         public string LogConn;
         public string BillingConn;
+        public string API_KEY;
 
         public bool isEnableAutoRegister; //enables auto register
         public bool isCheckIPBlock; //no possible to work, requests come from local from Main Auth Server request string has local IP in it
         public bool isCheckMultipleIP; //no implemented, pull ips from login log or user table and compare them with AC port connections if exists, this can be an int value X number of connections allowed from one IP
         public bool isMaintenanceMode; //enables maintenance mode, only admins in TblRoleGroupMember can login
         public bool isEnableAcoin; //enables acoin needto create table before activating
-
+        public bool isCheckStrongPassword;
         public Service(bool reload)
         {
             if (reload)
@@ -47,7 +48,9 @@ namespace desert_auth.Class
             isCheckMultipleIP = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isCheckMultipleIP")));
             isMaintenanceMode = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isMaintenanceMode")));
             isEnableAcoin = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isEnableAcoin")));
-            if (isEnableAutoRegister == null || isCheckIPBlock == null || isCheckMultipleIP == null || isMaintenanceMode == null || isEnableAcoin == null) return false;
+            isCheckStrongPassword = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isCheckStrongPassword")));
+            API_KEY = _ini.Read("SETTINGS", "API_KEY");
+            if (isEnableAutoRegister == null || isCheckIPBlock == null || isCheckMultipleIP == null || isMaintenanceMode == null || isEnableAcoin == null || API_KEY == null || isCheckStrongPassword == null) return false;
 
             //CONNECTION
             GameConn = _ini.Read("CONNECTION", "GameConn");
@@ -84,6 +87,8 @@ namespace desert_auth.Class
             string motif = @"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$";
             if (number != null) return Regex.IsMatch(number, motif);
             else return false;
-        }        
+        }      
+        
+        
     }
 }

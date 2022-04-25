@@ -1,5 +1,6 @@
 using desert_auth.Class;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 Service _service = new Service(true);
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,12 +22,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<IPControlMiddleware>();
+
+//app.UseMiddleware<IPControlMiddleware>();
 
 //sapp.UseHttpsRedirection();
 
-//app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+
+    app.Run();

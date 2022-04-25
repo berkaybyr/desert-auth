@@ -140,5 +140,27 @@ namespace desert_auth.Class
 
             return "";
         }
+        public DateTime GetPremiumEndTimebyID(long userNo)
+        {
+            string sql = "SELECT _starterPackageBuffExpiration from PaGamePrivate.TblBriefUserInformation WHERE _userNo = @userid ";
+            using (SqlConnection conn = new SqlConnection(_s.GameConn))
+            {
+
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@userid", userNo));
+                    var scalar = cmd.ExecuteScalar();
+                    if (scalar != null)
+                        return DateTime.Parse(scalar.ToString());
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                return DateTime.Parse("1900-01-01");
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ namespace desert_auth.Class
     {
         Service _service = new Service(true);
         readonly RequestDelegate _next;
-        IConfiguration _configuration;
         public IPControlMiddleware(RequestDelegate next)
         {
             _next = next;

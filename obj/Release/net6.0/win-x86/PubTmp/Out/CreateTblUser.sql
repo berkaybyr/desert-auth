@@ -26,3 +26,24 @@ CREATE TABLE [dbo].[TblUser](
 GO
 
 
+USE [EVOBDO_WORLDDB_0001]
+GO
+
+/****** Object:  Table [dbo].[TblPasswordLog]    Script Date: 11.04.2022 23:07:07 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TblPasswordLog](
+	[registerDate] [datetime] NOT NULL,
+	[userNo] [bigint] NOT NULL,
+	[oldPassword] [nvarchar](32) NOT NULL,
+	[newPassword] [nvarchar](32) NOT NULL,
+	[reason] [nvarchar](20) NOT NULL,
+	[ip] [nvarchar](20) NOT NULL
+) ON [PRIMARY]
+GO
+
+

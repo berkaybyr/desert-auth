@@ -359,7 +359,6 @@ C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\dbgshim.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\hostfxr.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\hostpolicy.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscordaccore.dll
-C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscordaccore_x86_x86_6.0.322.12309.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscordbi.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscorrc.dll
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\msquic.dll
@@ -385,3 +384,4 @@ C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\service.ini
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\desert_auth.Properties.Resources.resources
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\desert-auth.csproj.GenerateResource.cache
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\CreateTblUser.sql
+C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscordaccore_x86_x86_6.0.422.16404.dll

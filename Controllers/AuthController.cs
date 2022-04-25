@@ -23,8 +23,9 @@ namespace desert_auth.Controllers
             {
                 string UNAME = token.Split(",")[0];
                 string PASSWORD = token.Split(",")[1];
-                var cmd = new SqlCommand("SELECT * FROM PaGamePrivate.TblUserInformation WHERE _userId LIKE @userid");
-                cmd.Parameters.AddWithValue("@userid", $"{UNAME},%");
+                //var cmd = new SqlCommand("SELECT * FROM PaGamePrivate.TblUserInformation WHERE _userId LIKE @userid");
+                var cmd = new SqlCommand("SELECT * FROM PaGamePrivate.TblUserInformation WHERE _username = @username AND _isValid = 1");
+                cmd.Parameters.AddWithValue("@username", $"{UNAME}");
                 var dbSearch = _easql.GetTable(_s.WorldConn, cmd);
                 switch (dbSearch.Rows.Count)
                 {
@@ -36,7 +37,7 @@ namespace desert_auth.Controllers
                         }
                         break;
                     case 1:
-                        string? DB_PASSWORD = dbSearch.Rows[0]["_userId"].ToString().Split(",")[1];
+                        string? DB_PASSWORD = dbSearch.Rows[0]["_realPassword"].ToString();
                         if (!DB_PASSWORD.Equals(PASSWORD))
                         {
                             _s.Log("[WRONG PASSWORD] " + LOG);
@@ -56,10 +57,10 @@ namespace desert_auth.Controllers
                         break;
                     default:
                         _s.Log("[MULTIPLE ENTRY FOUND] " + LOG);
-                        return StatusCode(ERROR, RESPONSE);                        
+                        return StatusCode(ERROR, RESPONSE);
 
                 }
-                
+
                 //Will not always work sometimes the ip is public VDS IP
                 cmd.Parameters.Clear();
                 cmd = new SqlCommand($"SELECT * FROM PaGamePrivate.TblBlockedIP WHERE _startIP LIKE @ip OR _endIP LIKE @ip");
@@ -69,9 +70,14 @@ namespace desert_auth.Controllers
                 {
                     if (IPBLOCKTBL.Rows.Count != 0)
                     {
-                        _log.Create("[IP BANNED] " + LOG);
+                        _s.Log("[IP BANNED] " + LOG);
                         return StatusCode(ERROR, RESPONSE);
                     }
+                }
+                if (CheckIfMultipleLogin(""))
+                {
+                    _s.Log("[MULTIPLE LOGIN] " + LOG);
+                    return StatusCode(ERROR, RESPONSE);
                 }
                 
                 _s.Log("[VALID TOKEN] " + LOG);
@@ -83,44 +89,9 @@ namespace desert_auth.Controllers
                 _s.Log("[INVALID TOKEN] " + LOG + " " + e);
                 return StatusCode(ERROR, RESPONSE);
             }
-
-        }
-
-
-
+            bool CheckIfMultipleLogin(string IP) {
+                return false;
+            }
+        }     
     }
 }
-/*
- if (dbSearch.Rows.Count == 0)
-                {
-                    if (!_s.isEnableAutoRegister)
-                    {
-                        _s.Log("[USER NOT FOUND] " + LOG);
-                        return StatusCode(ERROR, RESPONSE);
-                    }
-                }
-                else if (dbSearch.Rows.Count == 1)
-                {
-                    string? DB_PASSWORD = dbSearch.Rows[0]["_userId"].ToString().Split(",")[1];
-                    if (!DB_PASSWORD.Equals(PASSWORD))
-                    {
-                        _s.Log("[WRONG PASSWORD] " + LOG);
-                        return StatusCode(ERROR, RESPONSE);
-                    }
-                    
-                    long? USERNO = long.Parse(dbSearch.Rows[0]["_userNo"].ToString());
-                    cmd.Parameters.Clear();
-                    cmd = new SqlCommand($"SELECT _userNo FROM PaGamePrivate.TblRoleGroupMember WHERE _userNo = @userno");
-                    cmd.Parameters.AddWithValue("@userno", USERNO);
-                    var ADMINNO = _easql.GetTable(_s.WorldConn, cmd);
-                    if (ADMINNO.Rows.Count == 0 && _s.isMaintenanceMode)
-                    {
-                        _s.Log("[MAINTENANCE MODE] " + LOG);
-                        return StatusCode(ERROR, RESPONSE);
-                    }
-                }
-                else {
-                    _s.Log("[MULTIPLE ENTRY FOUND] " + LOG);
-                    return StatusCode(ERROR, RESPONSE);
-                }
- */
