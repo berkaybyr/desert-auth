@@ -2,6 +2,10 @@
 using EasMe;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Text;
 
 namespace desert_auth.Controllers
 {
@@ -61,7 +65,7 @@ namespace desert_auth.Controllers
 
                 }
 
-                //Will not always work sometimes the ip is public VDS IP
+                //IF ANTICHEAT IS ENABLED IP WILL BE VDS IP
                 cmd.Parameters.Clear();
                 cmd = new SqlCommand($"SELECT * FROM PaGamePrivate.TblBlockedIP WHERE _startIP LIKE @ip OR _endIP LIKE @ip");
                 cmd.Parameters.AddWithValue("@ip", $"%{userIp}%");
@@ -90,6 +94,7 @@ namespace desert_auth.Controllers
                 return StatusCode(ERROR, RESPONSE);
             }
             bool CheckIfMultipleLogin(string IP) {
+                //NOT WORKING WITH ANTICHEAT
                 return false;
             }
         }     

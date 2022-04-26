@@ -19,7 +19,7 @@ namespace desert_auth.Controllers
 
             if (!_s.isEnableAcoin)
             {
-                _s.Log($"[GETBALANCE] [ACOIN DISABLED] TOKEN:{USERNO} BALANCE: 0");                
+                _s.Log($"[GETBALANCE] [ACOIN DISABLED] TOKEN:{USERNO} BALANCE:0");                
                 return Ok(GetResponse(0, "OK", USERNO, 0));
             }
             try
@@ -33,22 +33,23 @@ namespace desert_auth.Controllers
                 cmd.Parameters.AddWithValue("@password", Password);
                 cmd.Parameters.AddWithValue("@username", Username);
                 var Balance = _easql.ExecScalar(_s.WorldConn, cmd);
+                
                 if (Balance != null)
                 {
                     CASHREAL = long.Parse(Balance.ToString());                  
 
-                    _s.Log($"[GETBALANCE] TOKEN:{USERNO} BALANCE:{CASHREAL}");
+                    _s.Log($"[GETBALANCE] [SUCCESS] TOKEN:{USERNO} BALANCE:{CASHREAL}");
                     return Ok(GetResponse(0, "OK", USERNO, CASHREAL));
                 }
                 else
                 {
-                    _s.Log($"[GETBALANCE] [FAILED] TOKEN:{USERNO} ");
+                    _s.Log($"[GETBALANCE] [FAILED] TOKEN:{USERNO} ERRMSG:USER NOT FOUND");
                     return Ok(GetResponse(-1, "USER_NOT_EXIST", USERNO, 0));
                 }
             }
             catch (Exception e)
             {
-                _s.Log($"[GETBALANCE] [FAILED] TOKEN:{USERNO} ERROR: {e.Message}");
+                _s.Log($"[GETBALANCE] [FAILED] TOKEN:{USERNO} ERRMSG:{e.Message}");
                 return Ok(GetResponse(-1, "ERROR_OCCURED", USERNO, 0));
             }
             
@@ -76,7 +77,7 @@ namespace desert_auth.Controllers
 
             if (!_s.isEnableAcoin)
             {
-                _s.Log($"[PURCHASE ITEM] [FAILED ACOIN DISABLED] TOKEN:{USERNO}");
+                _s.Log($"[PURCHASE ITEM] [ACOIN DISABLED] TOKEN:{USERNO}");
                 return Ok(GetResponse(-1, "ACOIN_DISABLED",USERNO,GAMEITEMID,CHARGEAMT,0));
             }
             try
@@ -91,7 +92,7 @@ namespace desert_auth.Controllers
 
                 if (Balance == null)
                 {
-                    _s.Log($"[PURCHASE ITEM] [FAILED USER NOT EXIST] TOKEN:{USERNO}");
+                    _s.Log($"[PURCHASE ITEM] [FAILED] TOKEN:{USERNO} ERRMSG:USER NOT EXIST");
                     return Ok(GetResponse(-1, "USER_NOT_EXIST", USERNO, GAMEITEMID, CHARGEAMT,0));
                 }
                 else
@@ -104,12 +105,12 @@ namespace desert_auth.Controllers
                         cmd.Parameters.AddWithValue("@userno", Usernumber);
                         cmd.Parameters.AddWithValue("@balance", CASHREAL - CHARGEAMT);
                         _easql.ExecQuery(_s.WorldConn, cmd);
-                        _s.Log($"[PURCHASE ITEM] [SUCCESSFUL] TOKEN:{USERNO} NEW BALANCE:{CASHREAL} CHARGE AMOUNT: {CHARGEAMT} ITEMID: {GAMEITEMID}");
+                        _s.Log($"[PURCHASE ITEM] [SUCCESS] TOKEN:{USERNO} NEW BALANCE:{CASHREAL} CHARGE AMOUNT: {CHARGEAMT} ITEMID: {GAMEITEMID}");
                         return Ok(GetResponse(0, "OK", USERNO, GAMEITEMID, CHARGEAMT,CASHREAL - CHARGEAMT));
                     }
                     else
                     {
-                        _s.Log($"[PURCHASE ITEM] [FAILED] TOKEN:{USERNO} BALANCE:{CASHREAL} CHARGE AMOUNT: {CHARGEAMT} ITEMID: {GAMEITEMID}");
+                        _s.Log($"[PURCHASE ITEM] [FAILED] TOKEN:{USERNO} BALANCE:{CASHREAL} CHARGE AMOUNT: {CHARGEAMT} ITEMID: {GAMEITEMID} ERRMSG:USER DONT HAVE ENOUGH CASH");
                         return Ok(GetResponse(-1, "NOT_ENOUGH_CASH", USERNO, GAMEITEMID, CHARGEAMT, CASHREAL));
                     }
                     
@@ -119,7 +120,7 @@ namespace desert_auth.Controllers
             }
             catch (Exception e)
             {
-                _s.Log($"[PURCHASE ITEM] [FAILED EXCEPTION] TOKEN:{USERNO} ERROR: {e.Message}");
+                _s.Log($"[PURCHASE ITEM] [FAILED] TOKEN:{USERNO} ERRMSG:{e.Message}");
                 return Ok(GetResponse(-1, "ERROR_OCCURED", USERNO, GAMEITEMID, CHARGEAMT, 0));
             }
             
