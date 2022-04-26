@@ -48,9 +48,8 @@ namespace desert_auth.Class
             isCheckMultipleIP = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isCheckMultipleIP")));
             isMaintenanceMode = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isMaintenanceMode")));
             isEnableAcoin = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isEnableAcoin")));
-            isCheckStrongPassword = Convert.ToBoolean(int.Parse(_ini.Read("SETTINGS", "isCheckStrongPassword")));
             API_KEY = _ini.Read("SETTINGS", "API_KEY");
-            if (isEnableAutoRegister == null || isCheckIPBlock == null || isCheckMultipleIP == null || isMaintenanceMode == null || isEnableAcoin == null || API_KEY == null || isCheckStrongPassword == null) return false;
+            if (isEnableAutoRegister == null || isCheckIPBlock == null || isCheckMultipleIP == null || isMaintenanceMode == null || isEnableAcoin == null || API_KEY == null ) return false;
 
             //CONNECTION
             GameConn = _ini.Read("CONNECTION", "GameConn");
