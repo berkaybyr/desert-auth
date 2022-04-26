@@ -385,3 +385,4 @@ C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\desert_auth.P
 C:\Users\berka\source\repos\desert-auth\obj\Release\net6.0\win-x86\desert-auth.csproj.GenerateResource.cache
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\CreateTblUser.sql
 C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\mscordaccore_x86_x86_6.0.422.16404.dll
+C:\Users\berka\source\repos\desert-auth\bin\Release\net6.0\win-x86\Newtonsoft.Json.dll

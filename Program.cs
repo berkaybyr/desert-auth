@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseMiddleware<IPControlMiddleware>();
+app.UseMiddleware<IPControlMiddleware>();
 
 //sapp.UseHttpsRedirection();
 
