@@ -25,6 +25,11 @@ namespace desert_auth.Controllers
             int ERROR = 100;
             try
             {
+                if (!token.Contains(','))
+                {
+                    _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:TOKEN IS INVALID");
+                    return StatusCode(ERROR, RESPONSE);
+                }
                 string UNAME = token.Split(",")[0];
                 string PASSWORD = token.Split(",")[1];
                 //var cmd = new SqlCommand("SELECT * FROM PaGamePrivate.TblUserInformation WHERE _userId LIKE @userid");
@@ -36,7 +41,7 @@ namespace desert_auth.Controllers
                     case 0:
                         if (!_s.isEnableAutoRegister)
                         {
-                            _s.Log("[USER NOT FOUND] " + LOG);
+                            _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:USER NOT FOUND]");
                             return StatusCode(ERROR, RESPONSE);
                         }
                         break;
@@ -44,7 +49,7 @@ namespace desert_auth.Controllers
                         string? DB_PASSWORD = dbSearch.Rows[0]["_realPassword"].ToString();
                         if (!DB_PASSWORD.Equals(PASSWORD))
                         {
-                            _s.Log("[WRONG PASSWORD] " + LOG);
+                            _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:WRONG PASSWORD");
                             return StatusCode(ERROR, RESPONSE);
                         }
 
@@ -55,12 +60,12 @@ namespace desert_auth.Controllers
                         var ADMINNO = _easql.GetTable(_s.WorldConn, cmd);
                         if (ADMINNO.Rows.Count == 0 && _s.isMaintenanceMode)
                         {
-                            _s.Log("[MAINTENANCE MODE] " + LOG);
+                            _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:MAINTENANCE MODE ");
                             return StatusCode(ERROR, RESPONSE);
                         }
                         break;
                     default:
-                        _s.Log("[MULTIPLE ENTRY FOUND] " + LOG);
+                        _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:MULTIPLE ENTRY FOUND");
                         return StatusCode(ERROR, RESPONSE);
 
                 }
@@ -74,23 +79,23 @@ namespace desert_auth.Controllers
                 {
                     if (IPBLOCKTBL.Rows.Count != 0)
                     {
-                        _s.Log("[IP BANNED] " + LOG);
+                        _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:IP BANNED]");
                         return StatusCode(ERROR, RESPONSE);
                     }
                 }
                 if (CheckIfMultipleLogin(""))
                 {
-                    _s.Log("[MULTIPLE LOGIN] " + LOG);
+                    _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:MULTIPLE LOGIN]");
                     return StatusCode(ERROR, RESPONSE);
                 }
                 
-                _s.Log("[VALID TOKEN] " + LOG);
+                _s.Log($"[AUTHENTICATE USER] [SUCCESS] " + LOG);
                 return StatusCode(200, RESPONSE);
 
             }
             catch (Exception e)
             {
-                _s.Log("[INVALID TOKEN] " + LOG + " " + e);
+                _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:{e}");
                 return StatusCode(ERROR, RESPONSE);
             }
             bool CheckIfMultipleLogin(string IP) {
