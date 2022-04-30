@@ -12,7 +12,7 @@ namespace desert_auth.Class
         {
             var cmd = new SqlCommand("SELECT _userNo FROM PaGamePrivate.TblUserInformation WHERE _userId LIKE @username");
             cmd.Parameters.AddWithValue("@username", $"{username},%");
-            var userNo = _sql.ExecScalar(_s.WorldConn,cmd);
+            var userNo = _sql.ExecScalar(_s.WorldConn, cmd);
             if (userNo != null)
             {
                 return long.Parse(userNo.ToString());
@@ -161,6 +161,113 @@ namespace desert_auth.Class
                 }
                 return DateTime.Parse("1900-01-01");
             }
+        }
+        public string GetPassword(string FAMILYNAME)
+        {
+            string sql = "SELECT _realPassword from PaGamePrivate.TblUserInformation WHERE _userNickname = @famname";
+            using (SqlConnection conn = new SqlConnection(_s.WorldConn))
+            {
+
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@famname", FAMILYNAME));
+                    var scalar = cmd.ExecuteScalar();
+                    if (scalar != null)
+                        return scalar.ToString();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            return "";
+        }
+        public long GetBalancebyUsername(string USERNAME, string PASSWORD)
+        {
+            try
+            {
+                var cmd = new SqlCommand("SELECT _balance FROM PaGamePrivate.TblUserInformation WHERE _userId = @userId AND _realPassword = @password AND _userName = @username AND _isValid = 1");
+                cmd.Parameters.AddWithValue("@userId", $"{USERNAME},{PASSWORD}");
+                cmd.Parameters.AddWithValue("@password", PASSWORD);
+                cmd.Parameters.AddWithValue("@username", USERNAME);
+                var Balance = _sql.ExecScalar(_s.WorldConn, cmd);
+                if (Balance != null)
+                {
+                    return long.Parse(Balance.ToString());
+                }
+                return -1;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+        public long UpdateBalance(string FAMILYNAME, long BALANCE)
+        {
+            try
+            {
+                long oldBalance = GetBalancebyUsername(FAMILYNAME, GetPassword(FAMILYNAME));
+                if (oldBalance == -1)
+                    return -1;
+                if (BALANCE < 0)
+                {
+                    if (oldBalance + BALANCE < 0)
+                    {
+                        return -2;
+                    }
+                }
+                string query = "UPDATE PaGamePrivate.TblUserInformation SET _balance = @balance WHERE _userNickname = @familyname AND _isValid = 1";
+                var cmd = new SqlCommand(query);
+                cmd.Parameters.AddWithValue("@balance", oldBalance + BALANCE);
+                cmd.Parameters.AddWithValue("@familyname", FAMILYNAME);
+                var result = _sql.ExecQuery(_s.WorldConn, cmd);
+                if (result > 0)
+                {
+                    return oldBalance + BALANCE;
+                }
+                return -1;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+        public long TransferBalance(string fromFamilyName, string fromPassword, string toFamilyname, long CASH)
+        {
+            var dbPassword = GetPassword(fromFamilyName);
+            long fromOldBalance = GetBalancebyUsername(fromFamilyName, fromPassword);
+            if (dbPassword != fromPassword)
+                return -1;
+            if (fromOldBalance == -1)
+                return -1;
+            if (CASH < 0)
+                return -1;
+            if (fromOldBalance - CASH < 0)
+                return -2;
+
+            string query = "UPDATE PaGamePrivate.TblUserInformation SET _balance = @balance WHERE _userNickname = @familyname AND _isValid = 1";
+            var cmd = new SqlCommand(query);
+            cmd.Parameters.AddWithValue("@balance", fromOldBalance - CASH);
+            cmd.Parameters.AddWithValue("@familyname", fromFamilyName);
+            var result = _sql.ExecQuery(_s.WorldConn, cmd);
+            if (result > 0)
+            {
+                long toOldBalance = GetBalancebyUsername(toFamilyname, GetPassword(toFamilyname));
+                query = "UPDATE PaGamePrivate.TblUserInformation SET _balance = @balance WHERE _userNickname = @familyname AND _isValid = 1";
+                cmd.Parameters.Clear();
+                cmd = new SqlCommand(query);
+                cmd.Parameters.AddWithValue("@balance", toOldBalance + CASH);
+                cmd.Parameters.AddWithValue("@familyname", toFamilyname);
+                result = _sql.ExecQuery(_s.WorldConn, cmd);
+                if (result > 0)
+                    return 0;
+
+            }
+            return -1;
         }
     }
 }

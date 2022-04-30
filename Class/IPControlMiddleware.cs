@@ -8,6 +8,7 @@ namespace desert_auth.Class
         readonly RequestDelegate _next;
         public IPControlMiddleware(RequestDelegate next)
         {
+            
             _next = next;
         }
         public async Task Invoke(HttpContext context)

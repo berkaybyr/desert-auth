@@ -4,7 +4,8 @@ using desert_auth.Class;
 var builder = WebApplication.CreateBuilder(args);
 
 Service _service = new Service(true);
-
+_service.Log("[SERVICE] [SUCCESS] Service loading completed");
+_service.Log("[INFO] Please do not edit service.ini while app is running");
 
 // Add services to the container.
 
@@ -31,4 +32,4 @@ app.UseMiddleware<IPControlMiddleware>();
 app.MapControllers();
 
 
-    app.Run();
+app.Run();

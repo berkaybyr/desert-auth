@@ -28,16 +28,11 @@ namespace desert_auth.Controllers
                 string Username = USERNO.Split(",")[0];
                 string Password = USERNO.Split(",")[1];
                 var Usernumber = _data.GetUserNobyUsername(Username);
-                var cmd = new SqlCommand("SELECT _balance FROM PaGamePrivate.TblUserInformation WHERE _userNo = @userno AND _realPassword = @password AND _userName = @username AND _isValid = 1");
-                cmd.Parameters.AddWithValue("@userno", Usernumber);
-                cmd.Parameters.AddWithValue("@password", Password);
-                cmd.Parameters.AddWithValue("@username", Username);
-                var Balance = _easql.ExecScalar(_s.WorldConn, cmd);
-                
-                if (Balance != null)
-                {
-                    CASHREAL = long.Parse(Balance.ToString());                  
+                var Balance = _data.GetBalancebyUsername(Username, Password);
 
+                if (Balance != -1)
+                {
+                    CASHREAL = long.Parse(Balance.ToString());
                     _s.Log($"[GETBALANCE] [SUCCESS] TOKEN:{USERNO} BALANCE:{CASHREAL}");
                     return Ok(GetResponse(0, "OK", USERNO, CASHREAL));
                 }
@@ -141,15 +136,94 @@ namespace desert_auth.Controllers
             }
         }
 
+        //KEY IS CUSTOM PASSWORD FOR THIS ACTION IT CAN BE SET IN SERVICE.INI FILE
+        //CASH CAN BE MINUS TO DECREASE CASH FROM USER, MOSTLY NOT NEEDED        
         [HttpPost]
-        public IActionResult UpdateBalance(long USERNO, string USERNAME, string PASSWORD, long CASH, string REQUESTER, string TOKEN)
+        public IActionResult UpdateBalance(string FAMILYNAME, long CASH, string REQUESTER, string KEY)
         {
-            return StatusCode(100);
+            if (!_s.isEnableAcoin)
+            {
+                _s.Log($"[UPDATE BALANCE] [ACOIN DISABLED] FAMILYNAME:{FAMILYNAME} BALANCE:0");
+                return BadRequest(new { status = "ERROR", message = "Acoin is disabled"});
+            }
+            if (KEY != _s.UpdateBalanceKey)
+            {
+                _s.Log($"[UPDATE BALANCE] [FAILED] FAMILYNAME:{FAMILYNAME} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:INVALID KEY");
+                return BadRequest(new { status = "ERROR", message = "Invalid key" });
+            }
+            if(_data.GetUserNobyFamName(FAMILYNAME) == -1)
+            {
+                _s.Log($"[UPDATE BALANCE] [FAILED] FAMILYNAME:{FAMILYNAME} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:FAMILY NOT EXIST");
+                return BadRequest(new { status = "ERROR", message = "Family name not exist" });
+            }
+            
+            var result = _data.UpdateBalance(FAMILYNAME, CASH);
+            if (result == -1)
+            {
+                _s.Log($"[UPDATE BALANCE] [FAILED] FAMILYNAME:{FAMILYNAME} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:UPDATE FAILED");
+                return BadRequest(new { status = "ERROR", message = "An internal error occured, please contact support" });
+            }
+            else if (result == -2)
+            {
+                _s.Log($"[UPDATE BALANCE] [FAILED] FAMILYNAME:{FAMILYNAME} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:USER DONT HAVE ENOUGH CASH ");
+                return BadRequest(new { status = "ERROR", message = "User don't have enough cash" });
+            }
+            else
+            {
+                _s.Log($"[UPDATE BALANCE] [SUCCESS] FAMILYNAME:{FAMILYNAME} CASH:{CASH} REQUESTER:{REQUESTER}");
+                return Ok(new { status = "SUCCESS", message = "Update balance is successful", newbalance = result });
+            }
         }
         [HttpPost]
-        public IActionResult TransferBalance(long fromUSERNO, string USERNAME, string PASSWORD, string toUSERNO, long CASH, string REQUESTER, string TOKEN)
+        public IActionResult TransferBalance(string fromFamilyName, string fromPassword, string toFamilyname, long CASH, string REQUESTER, string KEY)
         {
-            return StatusCode(100);
+            if (!_s.isEnableAcoin)
+            {
+                _s.Log($"[TRANSFER BALANCE] [ACOIN DISABLED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER}");
+                return BadRequest(new { status ="ERROR",message = "ACOIN_DISABLED" });
+            }
+            if (KEY != _s.UpdateBalanceKey) //USING SAME PASS KEY FOR UPDATE AND TRASNFER ACTIONS
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:INVALID KEY");
+                return BadRequest(new { status = "ERROR", message = "Invalid key" });
+            }
+            if (_data.GetUserNobyFamName(fromFamilyName) == -1)
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:FROM FAMILY NOT EXIST");
+                return BadRequest(new { status = "ERROR", message = "From family name not exist" });
+            }
+            if (_data.GetUserNobyFamName(toFamilyname) == -1)
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:TO FAMILY NOT EXIST");
+                return BadRequest(new { status = "ERROR", message = "To family name not exist" });
+            }
+            if (_data.GetUserNobyFamName(fromFamilyName) == _data.GetUserNobyFamName(toFamilyname))
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:CANNOT TRANSFER TO SELF");
+                return BadRequest(new { status = "ERROR", message = "Can not transfer to self" });
+            }
+            if (CASH > 99999)
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:INVALID CASH AMOUNT");
+                return BadRequest(new { status = "ERROR", message = "Invalid cash amount" });
+            }
+            var result = _data.TransferBalance(fromFamilyName,fromPassword,toFamilyname, CASH);
+            if (result == -1)
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:UPDATE FAILED");
+                return BadRequest(new { status = "ERROR", message = "An internal error occured, please contact support" });
+            }
+            else if (result == -2)
+            {
+                _s.Log($"[TRANSFER BALANCE] [FAILED] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER} ERRMSG:USER DONT HAVE ENOUGH CASH ");
+                return BadRequest(new { status = "ERROR", message = "User don't have enough cash" });
+            }
+            else
+            {
+                _s.Log($"[TRANSFER BALANCE] [SUCCESS] FAMILYNAME:{fromFamilyName} TOFAMILYNAME:{toFamilyname} CASH:{CASH} REQUESTER:{REQUESTER}");
+                return Ok(new { status = "SUCCESS", message = "Transfer balance is successful"});
+            }
+
         }
     }
 }

@@ -219,7 +219,7 @@ namespace EasMe
         1 => Hourly 
         2 => Every Minute
         */
-        public void Create(string log, int interval = 0)
+        public void Create(string log, bool doConsoleLog = false,int interval = 0)
         {
             string IntervalFormat = "";
             string LogContent = $"[{DateTime.Now}] {log}\n" ;
@@ -241,6 +241,7 @@ namespace EasMe
             }
             
             string LogPath = DirLog + DateTime.Now.ToString(IntervalFormat) + " -log.txt";
+            if (doConsoleLog) Console.Write(LogContent);
             File.AppendAllText(LogPath, LogContent);           
 
         }
