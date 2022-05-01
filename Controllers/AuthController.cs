@@ -44,12 +44,12 @@ namespace desert_auth.Controllers
                 //    return StatusCode(ERROR, RESPONSE);
                 //}
                 
-                if (HasSpecialChars(UNAME))
+                if (HasSpecialChars(UNAME,false))
                 {
                     _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:USERNAME CAN ONLY CONTAIN A-z,0-9,_");
                     return StatusCode(ERROR, RESPONSE);
                 }
-                if (HasSpecialChars(UNAME))
+                if (HasSpecialChars(PASSWORD, false))
                 {
                     _s.Log($"[AUTHENTICATE USER] [FAILED] {LOG} ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_");
                     return StatusCode(ERROR, RESPONSE);
@@ -143,9 +143,48 @@ namespace desert_auth.Controllers
                 //NOT WORKING WITH ANTICHEAT ONLY WAY IS TO CHECK IF USER IS LOGGED IN PORT AND WHEN IP FROM TO PORT CONNECTION COUNT IS MORE THAN 1 CLOSE CONNECTION EITHER CHECK IT EVERY TIME A USER LOGGES IN OR CHECK IT ONCE AND THEN CHECK EVERY TIME
                 return false;
             }
-            bool HasSpecialChars(string yourString)
+            bool HasSpecialChars(string yourString,bool isPassword)
             {
-                return yourString.Any(ch => !Char.IsLetterOrDigit(ch) && ch != '_');
+                string AllowedinPassword = "!%#@_[](){}/*";
+                string AllowedinUsername = "_";
+                foreach (char c in yourString)
+                {
+                    if (char.IsLetterOrDigit(c))
+                    {
+                        continue;
+                    } 
+                    else if (isPassword)
+                    {
+                        foreach(char ch in AllowedinPassword)
+                        {
+                            if (c != ch)
+                            {
+                                return true;
+                            }                            
+                        }                        
+                    }
+                    else
+                    {
+                        foreach (char ch in AllowedinUsername)
+                        {
+                            if (c != ch)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    
+                }
+                return false;
+                //if (isPassword)
+                //{
+                //    return yourString.Any(c => !char.IsLetterOrDigit(c) && c != '_');
+                //}
+                //else
+                //{
+                //    return yourString.Any(c => !char.IsLetter(c) && c != '_');
+                //}
+                //return yourString.Any(ch => !Char.IsLetterOrDigit(ch) && ch != '_');
             }            
         }     
     }

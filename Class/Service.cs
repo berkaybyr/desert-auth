@@ -37,9 +37,17 @@ namespace desert_auth.Class
             var _ini = new EasINI(iniPath);           
             //IPWHITELIST
             string? temp = _ini.Read("SETTINGS", "IPWhiteList");
-            if (temp == null) return false;
+            if (temp == null)
+            {
+                Log("[SERVICE] [ERROR] IPWhiteList is null");
+                return false;
+            }
             IPWhiteList = temp.Split(',').ToList();
-            if (IPWhiteList.Count == 0) return false;
+            if (IPWhiteList.Count == 0)
+            {
+                Log("[SERVICE] [ERROR] IPWhiteList is empty");
+                return false;
+            }
             foreach (string ip in IPWhiteList)
             {
                 if (!Regex.IsMatch(ip, @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"))

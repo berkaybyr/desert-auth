@@ -1,0 +1,13 @@
+[1.05.2022 15:59:56] [SERVICE] [SUCCESS] Service loading completed
+[1.05.2022 15:59:56] [INFO] Please do not edit service.ini while app is running
+[1.05.2022 16:00:16] [SERVICE] [SUCCESS] Service loading completed
+[1.05.2022 16:00:16] [INFO] Please do not edit service.ini while app is running
+[1.05.2022 16:00:35] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asqwe()#[]+ IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:35] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asqwe()#[]+ IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:42] [AUTHENTICATE USER] [NEW REGISTER] TOKEN:dqweqw_sdaqwe,asdqwe IP:asddasasd
+[1.05.2022 16:00:47] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:48] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:48] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:49] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:49] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
+[1.05.2022 16:00:49] [AUTHENTICATE USER] [FAILED] TOKEN:dqweqw_sdaqwe,asdqwe() IP:asddasasd ERRMSG:PASSWORD CAN ONLY CONTAIN A-z,0-9,_
