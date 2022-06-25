@@ -1,4 +1,0 @@
-{"Date":"2022-06-25T02:58:52.7007343+03:00","LogType":0,"Logger":"EasLog","Severity":"INFO","ErrorNo":"SUCCESS","Message":"EasLogConfiguration loaded.","TraceAction":"Load","TraceClass":"Service"}
-{"Date":"2022-06-25T02:58:52.7758641+03:00","LogType":0,"Logger":"EasLog","Severity":"INFO","ErrorNo":"SUCCESS","Message":"isEnableAutoRegister: False isMaintenanceMode: True isCheckIpBlock: True isEnableAcoin: True updateBalanceKey: 000000000000000000000000000000000000000000","TraceAction":"<Main>$","TraceClass":"Program"}
-{"Date":"2022-06-25T03:02:14.2560401+03:00","LogType":0,"Logger":"EasLog","Severity":"INFO","ErrorNo":"SUCCESS","Message":"EasLogConfiguration loaded.","TraceAction":"Load","TraceClass":"Service"}
-{"Date":"2022-06-25T03:03:07.9587814+03:00","LogType":0,"Logger":"EasLog","Severity":"INFO","ErrorNo":"SUCCESS","Message":"EasLogConfiguration loaded.","TraceAction":"Load","TraceClass":"Service"}
