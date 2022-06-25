@@ -6,13 +6,11 @@ namespace desert_auth.Class
 {
     public class UserData
     {
-        Service _s = new Service(true);
-        EasQL _sql = new EasQL();
         public long GetUserNobyUsername(string username)
         {
             var cmd = new SqlCommand("SELECT _userNo FROM PaGamePrivate.TblUserInformation WHERE _userId LIKE @username");
             cmd.Parameters.AddWithValue("@username", $"{username},%");
-            var userNo = _sql.ExecScalar(_s.WorldConn, cmd);
+            var userNo = EasQL.ExecScalar(Service.WorldConn, cmd);
             if (userNo != null)
             {
                 return long.Parse(userNo.ToString());
@@ -23,7 +21,7 @@ namespace desert_auth.Class
         {
             string sql = "Select _userNo from PaGamePrivate.TblUserInformation where _userNickname = @familyname ";
             long userid = -1;
-            using (SqlConnection conn = new SqlConnection(_s.WorldConn))
+            using (SqlConnection conn = new SqlConnection(Service.WorldConn))
             {
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.Add(new SqlParameter("@familyname", SqlDbType.NVarChar)).Value = familyname;
@@ -45,7 +43,7 @@ namespace desert_auth.Class
         {
             string sql = "Select _userNo from PaGamePrivate.TblCharacterInformation where _characterName = @charName ";
             int userid = -1;
-            using (SqlConnection conn = new SqlConnection(_s.GameConn))
+            using (SqlConnection conn = new SqlConnection(Service.GameConn))
             {
 
                 try
@@ -69,7 +67,7 @@ namespace desert_auth.Class
         {
 
             string sql = "Select _userNickname from PaGamePrivate.TblUserInformation where _userNo = @userid ";
-            using (SqlConnection conn = new SqlConnection(_s.WorldConn))
+            using (SqlConnection conn = new SqlConnection(Service.WorldConn))
             {
 
                 try
@@ -94,7 +92,7 @@ namespace desert_auth.Class
         {
 
             string sql = "SELECT _characterName from PaGamePrivate.TblCharacterInformation WHERE _characterNo = @charid ";
-            using (SqlConnection conn = new SqlConnection(_s.GameConn))
+            using (SqlConnection conn = new SqlConnection(Service.GameConn))
             {
 
                 try
@@ -119,7 +117,7 @@ namespace desert_auth.Class
         {
 
             string sql = "SELECT _userNo from PaGamePrivate.TblCharacterInformation WHERE _characterNo = @charid ";
-            using (SqlConnection conn = new SqlConnection(_s.GameConn))
+            using (SqlConnection conn = new SqlConnection(Service.GameConn))
             {
 
                 try
@@ -143,7 +141,7 @@ namespace desert_auth.Class
         public DateTime GetPremiumEndTimebyID(long userNo)
         {
             string sql = "SELECT _starterPackageBuffExpiration from PaGamePrivate.TblBriefUserInformation WHERE _userNo = @userid ";
-            using (SqlConnection conn = new SqlConnection(_s.GameConn))
+            using (SqlConnection conn = new SqlConnection(Service.GameConn))
             {
 
                 try
@@ -165,7 +163,7 @@ namespace desert_auth.Class
         public string GetPassword(string FAMILYNAME)
         {
             string sql = "SELECT _realPassword from PaGamePrivate.TblUserInformation WHERE _userNickname = @famname";
-            using (SqlConnection conn = new SqlConnection(_s.WorldConn))
+            using (SqlConnection conn = new SqlConnection(Service.WorldConn))
             {
 
                 try
@@ -192,7 +190,7 @@ namespace desert_auth.Class
                 cmd.Parameters.AddWithValue("@userId", $"{USERNAME},{PASSWORD}");
                 cmd.Parameters.AddWithValue("@password", PASSWORD);
                 cmd.Parameters.AddWithValue("@username", USERNAME);
-                var Balance = _sql.ExecScalar(_s.WorldConn, cmd);
+                var Balance = EasQL.ExecScalar(Service.WorldConn, cmd);
                 if (Balance != null)
                 {
                     return long.Parse(Balance.ToString());
@@ -223,7 +221,7 @@ namespace desert_auth.Class
                 var cmd = new SqlCommand(query);
                 cmd.Parameters.AddWithValue("@balance", oldBalance + BALANCE);
                 cmd.Parameters.AddWithValue("@familyname", FAMILYNAME);
-                var result = _sql.ExecQuery(_s.WorldConn, cmd);
+                var result = EasQL.ExecNonQuery(Service.WorldConn, cmd);
                 if (result > 0)
                 {
                     return oldBalance + BALANCE;
@@ -253,7 +251,7 @@ namespace desert_auth.Class
             var cmd = new SqlCommand(query);
             cmd.Parameters.AddWithValue("@balance", fromOldBalance - CASH);
             cmd.Parameters.AddWithValue("@familyname", fromFamilyName);
-            var result = _sql.ExecQuery(_s.WorldConn, cmd);
+            var result = EasQL.ExecNonQuery(Service.WorldConn, cmd);
             if (result > 0)
             {
                 long toOldBalance = GetBalancebyUsername(toFamilyname, GetPassword(toFamilyname));
@@ -262,7 +260,7 @@ namespace desert_auth.Class
                 cmd = new SqlCommand(query);
                 cmd.Parameters.AddWithValue("@balance", toOldBalance + CASH);
                 cmd.Parameters.AddWithValue("@familyname", toFamilyname);
-                result = _sql.ExecQuery(_s.WorldConn, cmd);
+                result = EasQL.ExecNonQuery(Service.WorldConn, cmd);
                 if (result > 0)
                     return 0;
 

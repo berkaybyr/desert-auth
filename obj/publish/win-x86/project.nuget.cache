@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Zf6Dc62L3b1SjGk6rRXrPKMZm0aikBRelJkMuVBcBzB1yNF7K1Sv8ZLRya663kJU1sHFtYaAq57fZUA2EOXYbw==",
+  "dgSpecHash": "wlZsnhXPed/E0bSAeCSM/lA45UT9+LqFpC8ab3PswbLu2hvbHoPElYLhTQkyBSWN662uOBWpxQpoV1Rw38efZw==",
   "success": true,
   "projectFilePath": "C:\\Users\\berka\\source\\repos\\desert-auth\\desert-auth.csproj",
   "expectedPackageFiles": [
@@ -34,9 +34,9 @@
     "C:\\Users\\berka\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\berka\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\berka\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
-    "C:\\Users\\berka\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\6.0.4\\microsoft.netcore.app.runtime.win-x86.6.0.4.nupkg.sha512",
-    "C:\\Users\\berka\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\6.0.4\\microsoft.windowsdesktop.app.runtime.win-x86.6.0.4.nupkg.sha512",
-    "C:\\Users\\berka\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\6.0.4\\microsoft.aspnetcore.app.runtime.win-x86.6.0.4.nupkg.sha512"
+    "C:\\Users\\berka\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\6.0.5\\microsoft.netcore.app.runtime.win-x86.6.0.5.nupkg.sha512",
+    "C:\\Users\\berka\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\6.0.5\\microsoft.windowsdesktop.app.runtime.win-x86.6.0.5.nupkg.sha512",
+    "C:\\Users\\berka\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\6.0.5\\microsoft.aspnetcore.app.runtime.win-x86.6.0.5.nupkg.sha512"
   ],
   "logs": []
 }

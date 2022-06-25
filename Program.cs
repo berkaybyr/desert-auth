@@ -1,15 +1,17 @@
 using desert_auth.Class;
-
+using EasMe;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Service _service = new Service(true);
-_service.Log("[SERVICE] [SUCCESS] Service loading completed");
-_service.Log("[INFO] Please do not edit service.ini while app is running");
+
+
+Service.Load(); 
 
 // Add services to the container.
 
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -33,3 +35,4 @@ app.MapControllers();
 
 
 app.Run();
+
